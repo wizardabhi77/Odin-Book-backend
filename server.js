@@ -3,6 +3,7 @@ import Express from 'express';
 import cors from 'cors';
 import { configDotenv } from 'dotenv';
 import userRouter from './Routers/userRouter.js';
+import passport from './config/passport.js';
 
 const server = Express();
 
