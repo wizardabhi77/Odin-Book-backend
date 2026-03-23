@@ -11,7 +11,7 @@ server.use(Express.json());
 server.use(cors());
 server.use(Express.urlencoded({extended: true}))
 
-server.get("/", userRouter);
+server.use("/", userRouter);
 
 
 const PORT = process.env.PORT || 5050;

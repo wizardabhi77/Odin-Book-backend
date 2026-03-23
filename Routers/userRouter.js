@@ -7,7 +7,8 @@ const auth = passport.authenticate("jwt", {session: false});
 
 const userRouter = Router();
 
-userRouter.get("/user", userController.getUser);
+userRouter.get("/user", auth, userController.getUserById);
+userRouter.get("/friends", auth, userController.getFriends);
 
 userRouter.post("/login", userController.postLogin);
 userRouter.post("/register", userController.postRegister)

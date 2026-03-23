@@ -38,11 +38,25 @@ async function findUserById (id) {
     return user;
 }
 
+async function findFriends(uid) {
+
+    const friends = await prisma.users.findMany({
+        where : {
+            id : {
+                not : uid
+            }
+        }
+    });
+
+    return friends;
+}
+
 
 
 export default {
 
     createUser,
     findUserByName,
-    findUserById
+    findUserById,
+    findFriends
 }

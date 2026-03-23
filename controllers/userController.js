@@ -4,13 +4,22 @@ import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-async function getUser (req, res) {
+async function getUserById (req, res) {
 
-    const username = req.body.username;
+    const uid = req.user.id;
 
-    const user = await db.findUserByName(username);
+    const user = await db.findUserById(uid);
 
     res.json(user);
+}
+
+async function getFriends(req, res) {
+
+    const uid = req.user.id;
+
+    const friends = await db.findFriends(uid);
+
+    res.json(friends);
 }
 
 async function postLogin (req, res) {
@@ -23,15 +32,16 @@ async function postLogin (req, res) {
         const token = jwt.sign(
             { id: user.id, username: user.username },
             process.env.JWT_SECRET,
-            { expriresIn: "7d" }
+            { expiresIn: "7d" }
         );
 
         res.json({ token, user })
-    })
+    })(req, res);
 }
 
 async function postRegister(req, res) {
 
+    
     const {username, email, password } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,8 +51,10 @@ async function postRegister(req, res) {
     res.json(user.username);
 }
 
+
 export default {
-    getUser,
+    getUserById,
+    getFriends,
     postLogin,
     postRegister
 }
