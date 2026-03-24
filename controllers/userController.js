@@ -22,6 +22,8 @@ async function getFriends(req, res) {
     res.json(friends);
 }
 
+
+
 async function postLogin (req, res) {
 
     passport.authenticate("local", {session: false}, (err, user) => {
@@ -51,10 +53,31 @@ async function postRegister(req, res) {
     res.json(user.username);
 }
 
+async function postFollow(req, res) {
+
+    const userId = req.user.id;
+    const { followId } = req.body;
+
+    const follow = await db.createFollow(userId, followId);
+
+    res.json(follow);
+}
+
+async function postUnFollow(req, res) {
+
+    const userId = req.user.id;
+    const { followId } = req.body;
+
+    const follow = await db.deleteFollow(userId, followId);
+
+    res.json(follow);
+}
 
 export default {
     getUserById,
     getFriends,
     postLogin,
-    postRegister
+    postRegister,
+    postFollow,
+    postUnFollow
 }

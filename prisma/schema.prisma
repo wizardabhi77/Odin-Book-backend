@@ -18,6 +18,24 @@ model Users {
   username String @unique
   password String
   email String
+  
+  followers Follow[] @relation("following")
+  following Follow[] @relation("follower")
 
   @@map("users")
+}
+
+model Follow {
+
+  id Int @id @default(autoincrement())
+
+  follower Users @relation("follower", fields: [followerId], references: [id])
+  followerId Int
+
+  following Users @relation("following", fields: [followingId], references: [id])
+  followingId Int
+
+  createdAt DateTime @default(now())
+
+  @@unique([followerId, followingId])
 }

@@ -10,7 +10,10 @@ const userRouter = Router();
 userRouter.get("/user", auth, userController.getUserById);
 userRouter.get("/friends", auth, userController.getFriends);
 
+
 userRouter.post("/login", userController.postLogin);
-userRouter.post("/register", userController.postRegister)
+userRouter.post("/register", userController.postRegister);
+userRouter.post("/follow", auth, userController.postFollow);
+userRouter.post("/unfollow", auth, userController.postUnFollow);
 
 export default userRouter;
