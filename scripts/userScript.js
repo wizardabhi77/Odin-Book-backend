@@ -1,7 +1,7 @@
 
 import { prisma } from '../lib/prisma.js';
 
-
+//create
 
 async function createUser (username, email, password) {
 
@@ -28,6 +28,21 @@ async function createFollow (userId, followingId) {
     return follow;
 }
 
+async function createPost (userId, title, content) {
+
+    const post = await prisma.post.create({
+        data: {
+            title: title,
+            content: content,
+            userId: userId
+        }
+    });
+
+    return post;
+}
+
+//delete
+
 async function deleteFollow (userId, followindId) {
 
     const follow = await prisma.follow.deleteMany({
@@ -40,6 +55,18 @@ async function deleteFollow (userId, followindId) {
     return follow;
 }
 
+async function deletePost(postId) {
+
+    const post = await prisma.post.delete({
+        where: {
+            id : Number(postId)
+        }
+    });
+
+    return post;
+}
+
+//find
 
 async function findUserByName (username) {
 
@@ -91,7 +118,52 @@ async function findFriends(uid) {
     return friends;
 }
 
+async function findFeed(uid) {
 
+    const following = await prisma.follow.findMany({
+        where: {
+            followerId : uid
+        },
+        select: {
+            followingId: true
+        }
+    });
+    console.log(following);
+
+    const followingIds = following.map(f => f.followingId);
+
+    console.log(followingIds);
+
+    const feed = await prisma.post.findMany({
+        where: {
+            userId : {
+                in: [...followingIds, uid]
+            }
+        },
+        include: {
+            user: true
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+
+    return feed;
+}
+
+async function findUserPosts(uid) {
+
+    const userPosts = await prisma.post.findMany({
+        where: {
+            userId : uid
+        },
+        orderBy: {
+            createdAt: "desc"
+        }
+    });
+
+    return userPosts;
+}
 
 
 
@@ -99,8 +171,13 @@ export default {
 
     createUser,
     createFollow,
+    createPost,
     deleteFollow,
+    deletePost,
     findUserByName,
     findUserById,
-    findFriends
+    findFriends,
+    findFeed,
+    findUserPosts,
+    
 }

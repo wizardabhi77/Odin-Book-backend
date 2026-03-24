@@ -13,6 +13,7 @@ async function getUserById (req, res) {
     res.json(user);
 }
 
+
 async function getFriends(req, res) {
 
     const uid = req.user.id;
@@ -22,7 +23,25 @@ async function getFriends(req, res) {
     res.json(friends);
 }
 
+async function getFeed(req, res) {
 
+    const uid = req.user.id;
+
+    const feed = await db.findFeed(uid);
+
+    res.json(feed);
+}
+
+async function getUserPosts(req, res) {
+
+    const uid = req.user.id;
+
+    const userPosts = await db.findUserPosts(uid);
+
+    res.json(userPosts);
+}
+
+//post
 
 async function postLogin (req, res) {
 
@@ -73,11 +92,34 @@ async function postUnFollow(req, res) {
     res.json(follow);
 }
 
+async function postPost(req, res) {
+
+    const userId = req.user.id;
+    const { title,content } = req.body;
+
+    const post = await db.createPost(userId, title, content);
+
+    return post;
+}
+
+async function postDeletePost(req, res) {
+
+    const { postId } = req.body;
+
+    const post = await db.deletePost(postId);
+
+    res.json(post);
+}
+
 export default {
     getUserById,
     getFriends,
+    getFeed,
+    getUserPosts,
     postLogin,
     postRegister,
     postFollow,
-    postUnFollow
+    postUnFollow,
+    postPost,
+    postDeletePost
 }
