@@ -14,7 +14,7 @@ userRouter.get("/post/user", auth, userController.getUserPosts);
 
 
 
-userRouter.post("/login", userController.postLogin);
+userRouter.post("/login", passport.authenticate("local", {session: false}), userController.postLogin);
 userRouter.post("/register", userController.postRegister);
 userRouter.post("/follow", auth, userController.postFollow);
 userRouter.post("/unfollow", auth, userController.postUnFollow);

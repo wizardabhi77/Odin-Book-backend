@@ -45,19 +45,15 @@ async function getUserPosts(req, res) {
 
 async function postLogin (req, res) {
 
-    passport.authenticate("local", {session: false}, (err, user) => {
-        if (err || !user){
-            return res.status(404).json({message: "Invalid Credentials"});
-        }
+    const user = req.user;
 
-        const token = jwt.sign(
-            { id: user.id, username: user.username },
-            process.env.JWT_SECRET,
-            { expiresIn: "7d" }
-        );
+    const token = jwt.sign(
+        {id: user.id, username: user.username},
+        process.env.JWT_SECRET,
+        { expiresIn: "1d" }
+    );
 
-        res.json({ token, user })
-    })(req, res);
+    res.json({token, user });
 }
 
 async function postRegister(req, res) {
