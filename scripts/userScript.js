@@ -128,11 +128,11 @@ async function findFeed(uid) {
             followingId: true
         }
     });
-    console.log(following);
+    
 
     const followingIds = following.map(f => f.followingId);
 
-    console.log(followingIds);
+    
 
     const feed = await prisma.post.findMany({
         where: {
@@ -165,7 +165,61 @@ async function findUserPosts(uid) {
     return userPosts;
 }
 
+//update
 
+async function updateLike(postId) {
+
+    const post = await prisma.post.update({
+        where: {
+            id : postId
+        },
+        data: {
+            likes: {
+                increment: 1
+            }
+        },
+        include: {
+            user: true
+        }
+    });
+
+    return post;
+}
+
+async function updateDislike(postId) {
+
+    const post = await prisma.post.update({
+        where: {
+            id: postId
+        },
+        data: {
+            likes: {
+                decrement: 1
+            }
+        },
+        include: {
+            user: true
+        }
+    });
+    
+    return post;
+}
+
+async function updateUser(username, email, password, uid) {
+
+    const user = await prisma.users.update({
+        where: {
+            id: uid
+        },
+        data: {
+            username: username,
+            email: email,
+            password: password
+        }
+    });
+
+    return user;
+}
 
 export default {
 
@@ -179,5 +233,7 @@ export default {
     findFriends,
     findFeed,
     findUserPosts,
-    
+    updateLike,
+    updateDislike,
+    updateUser
 }

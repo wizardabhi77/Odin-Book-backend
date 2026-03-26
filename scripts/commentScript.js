@@ -7,6 +7,9 @@ async function createComment(uid, postId, text) {
             text: text,
             userId: uid,
             postId: postId
+        },
+        include: {
+            user: true
         }
     });
 

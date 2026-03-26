@@ -107,6 +107,38 @@ async function postDeletePost(req, res) {
     res.json(post);
 }
 
+async function postLike(req, res) {
+
+    const { postId } = req.body;
+
+    const post = await db.updateLike(postId);
+
+    res.json(post);
+}
+
+async function postDislike(req, res) {
+
+    const { postId } = req.body;
+
+    const post = await db.updateDislike(postId);
+
+    res.json(post);
+}
+
+async function postEditUser(req, res) {
+
+    const { username, email, password } = req.body;
+
+    const uid = req.user.id;
+
+     const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await db.updateUser(username, email, hashedPassword, uid);
+
+    res.json(user);
+
+}
+
 export default {
     getUserById,
     getFriends,
@@ -117,5 +149,8 @@ export default {
     postFollow,
     postUnFollow,
     postPost,
-    postDeletePost
+    postDeletePost,
+    postLike,
+    postDislike,
+    postEditUser
 }

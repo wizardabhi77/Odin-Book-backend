@@ -20,5 +20,8 @@ userRouter.post("/follow", auth, userController.postFollow);
 userRouter.post("/unfollow", auth, userController.postUnFollow);
 userRouter.post("/post", auth, userController.postPost);
 userRouter.post("/post/delete", auth, userController.postDeletePost);
+userRouter.post("/like", auth, userController.postLike);
+userRouter.post("/dislike", auth, userController.postDislike);
+userRouter.post("/edit", auth, userController.postEditUser);
 
 export default userRouter;
