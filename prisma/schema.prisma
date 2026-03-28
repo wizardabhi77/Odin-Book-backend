@@ -58,6 +58,9 @@ model Post {
 
   likes Int @default(0)
 
+  //likedBy Users @relation(fields: [likedId], references: [id])
+  //likedId Int
+
   comments Comment[]
 
   @@map("post")
