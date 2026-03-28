@@ -95,7 +95,7 @@ async function postPost(req, res) {
 
     const post = await db.createPost(userId, title, content);
 
-    return post;
+    res.json(post);
 }
 
 async function postDeletePost(req, res) {
