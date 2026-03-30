@@ -169,14 +169,21 @@ async function findFeed(uid) {
             }
         },
         include: {
-            user: true,
-            likes: {
-                select: {userId: true}
+        user: true,
+        likes: {
+            where: {
+                userId: uid
             },
-            _count: {
+            select: {
+                userId: true
+            }
+        },
+        _count: {
+            select: {
                 likes: true,
                 comments: true
             }
+        }
         },
         orderBy: {
             createdAt: "desc"
