@@ -2,6 +2,7 @@
 import { Router } from 'express';
 import userController from '../controllers/userController.js';
 import passport from 'passport';
+import upload from '../config/multer.js';
 
 const auth = passport.authenticate("jwt", {session: false});
 
@@ -11,6 +12,7 @@ userRouter.get("/user", auth, userController.getUserById);
 userRouter.get("/friends", auth, userController.getFriends);
 userRouter.get("/feed", auth, userController.getFeed);
 userRouter.get("/post/user", auth, userController.getUserPosts);
+userRouter.get("likes", auth, userController.getLikes);
 
 
 
@@ -23,5 +25,6 @@ userRouter.post("/post/delete", auth, userController.postDeletePost);
 userRouter.post("/like", auth, userController.postLike);
 userRouter.post("/dislike", auth, userController.postDislike);
 userRouter.post("/edit", auth, userController.postEditUser);
+userRouter.post("/profilePic", auth, upload.single("profilePic"), userController.postProfilePic);
 
 export default userRouter;

@@ -18,12 +18,15 @@ model Users {
   username String @unique
   password String
   email String
+
+  profilePic String? @default("https://res.cloudinary.com/dkgyxxpkd/image/upload/v1770976394/samples/zoom.avif")
   
   followers Follow[] @relation("following")
   following Follow[] @relation("follower")
 
   posts Post[]
   comments Comment[]
+  likes Likes[]
 
   @@map("users")
 }
@@ -56,12 +59,8 @@ model Post {
 
   createdAt DateTime @default(now())
 
-  likes Int @default(0)
-
-  //likedBy Users @relation(fields: [likedId], references: [id])
-  //likedId Int
-
   comments Comment[]
+  likes Likes[]
 
   @@map("post")
 }
@@ -79,4 +78,18 @@ model Comment {
   postId Int
 
   createdAt DateTime @default(now())
+}
+
+model Likes {
+
+  id Int @id @default(autoincrement())
+
+  user Users @relation(fields: [userId], references: [id])
+  userId Int
+
+  post Post @relation(fields: [postId], references: [id])
+  postId Int
+
+  @@unique([postId, userId])
+
 }

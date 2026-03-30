@@ -41,6 +41,18 @@ async function createPost (userId, title, content) {
     return post;
 }
 
+async function createLike(postId, uid) {
+
+    const like = await prisma.likes.create({
+        data: {
+            userId: uid,
+            postId: postId
+        }
+    })
+
+    return like;
+}
+
 //delete
 
 async function deleteFollow (userId, followindId) {
@@ -64,6 +76,22 @@ async function deletePost(postId) {
     });
 
     return post;
+}
+
+
+
+
+async function deleteLike(postId, uid) {
+
+    const like = await prisma.likes.delete({
+        where: {
+            userId: uid,
+            postId: postId
+        }
+        
+    });
+    
+    return like;
 }
 
 //find
@@ -141,7 +169,14 @@ async function findFeed(uid) {
             }
         },
         include: {
-            user: true
+            user: true,
+            likes: {
+                select: {userId: true}
+            },
+            _count: {
+                likes: true,
+                comments: true
+            }
         },
         orderBy: {
             createdAt: "desc"
@@ -165,47 +200,21 @@ async function findUserPosts(uid) {
     return userPosts;
 }
 
+async function findLikes(postId) {
+
+    const likes = await prisma.likes.count({
+        where: {
+            postId: postId
+        }
+    });
+
+    return likes;
+}
+
+
 //update
 
-async function updateLike(postId) {
-
-    const post = await prisma.post.update({
-        where: {
-            id : postId
-        },
-        data: {
-            likes: {
-                increment: 1
-            }
-        },
-        include: {
-            user: true
-        }
-    });
-
-    return post;
-}
-
-async function updateDislike(postId) {
-
-    const post = await prisma.post.update({
-        where: {
-            id: postId
-        },
-        data: {
-            likes: {
-                decrement: 1
-            }
-        },
-        include: {
-            user: true
-        }
-    });
-    
-    return post;
-}
-
-async function updateUser(username, email, password, uid) {
+async function updateUser(username, email, password, imgPath, uid) {
 
     const user = await prisma.users.update({
         where: {
@@ -214,7 +223,22 @@ async function updateUser(username, email, password, uid) {
         data: {
             username: username,
             email: email,
-            password: password
+            password: password,
+            profilePic: imgPath
+        }
+    });
+
+    return user;
+}
+
+async function updateProfilePic(imgPath, userId) {
+
+    const user = await prisma.users.update({
+        where: {
+            id: userId
+        },
+        data: {
+            profilePic: imgPath
         }
     });
 
@@ -233,7 +257,9 @@ export default {
     findFriends,
     findFeed,
     findUserPosts,
-    updateLike,
-    updateDislike,
-    updateUser
+    findLikes,
+    createLike,
+    deleteLike,
+    updateUser,
+    updateProfilePic
 }

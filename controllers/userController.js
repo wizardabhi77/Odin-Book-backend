@@ -4,6 +4,7 @@ import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
+
 async function getUserById (req, res) {
 
     const uid = req.user.id;
@@ -40,6 +41,17 @@ async function getUserPosts(req, res) {
 
     res.json(userPosts);
 }
+
+async function getLikes(req, res) {
+
+    const postId = req.body.postId;
+
+    const likeCount = await db.findLikes(postId);
+
+    res.json(likeCount);
+}
+
+
 
 //post
 
@@ -110,30 +122,52 @@ async function postDeletePost(req, res) {
 async function postLike(req, res) {
 
     const { postId } = req.body;
+    const uid = req.user.id;
 
-    const post = await db.updateLike(postId);
+    const like = await db.createLike(postId, uid);
 
-    res.json(post);
+    res.json(like);
 }
 
 async function postDislike(req, res) {
 
     const { postId } = req.body;
+    const uid = req.user.id;
 
-    const post = await db.updateDislike(postId);
+    const like = await db.updateDislike(postId, uid);
 
-    res.json(post);
+    res.json(like);
 }
 
 async function postEditUser(req, res) {
 
     const { username, email, password } = req.body;
 
+    const image = req.file;
+
+    let imagePath = null;
+
+    if(image){
+        imagePath = image.path;
+    }
+
     const uid = req.user.id;
 
      const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await db.updateUser(username, email, hashedPassword, uid);
+    const user = await db.updateUser(username, email, hashedPassword, imagePath, uid);
+
+    res.json(user);
+
+}
+
+async function postProfilePic(req, res) {
+
+    const imgPath = req.file.filename;
+
+    const userId = req.user.id;
+
+    const user = await db.updateProfilePic(imgPath, userId);
 
     res.json(user);
 
@@ -144,6 +178,7 @@ export default {
     getFriends,
     getFeed,
     getUserPosts,
+    getLikes,
     postLogin,
     postRegister,
     postFollow,
@@ -152,5 +187,6 @@ export default {
     postDeletePost,
     postLike,
     postDislike,
-    postEditUser
+    postEditUser,
+    postProfilePic
 }
