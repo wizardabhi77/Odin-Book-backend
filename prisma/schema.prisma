@@ -74,7 +74,7 @@ model Comment {
   user Users @relation(fields: [userId], references: [id])
   userId Int
 
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
 
   createdAt DateTime @default(now())
@@ -87,7 +87,7 @@ model Likes {
   user Users @relation(fields: [userId], references: [id])
   userId Int
 
-  post Post @relation(fields: [postId], references: [id])
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId Int
 
   @@unique([postId, userId])
