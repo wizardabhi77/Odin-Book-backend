@@ -85,8 +85,10 @@ async function deleteLike(postId, uid) {
 
     const like = await prisma.likes.delete({
         where: {
-            userId: uid,
-            postId: Number(postId)
+            postId_userId: {
+                postId: postId,
+                userId: userId
+            }
         }
         
     });
