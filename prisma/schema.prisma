@@ -19,7 +19,7 @@ model Users {
   password String
   email String
 
-  profilePic String? @default("https://res.cloudinary.com/dkgyxxpkd/image/upload/v1770976394/samples/zoom.avif")
+  profilePic String? @default("https://res.cloudinary.com/dkgyxxpkd/image/upload/v1774955545/pikachu_uuim0y.png")
   
   followers Follow[] @relation("following")
   following Follow[] @relation("follower")

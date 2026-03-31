@@ -46,7 +46,7 @@ async function createLike(postId, uid) {
     const like = await prisma.likes.create({
         data: {
             userId: uid,
-            postId: postId
+            postId: Number(postId)
         }
     })
 
@@ -86,7 +86,7 @@ async function deleteLike(postId, uid) {
     const like = await prisma.likes.delete({
         where: {
             userId: uid,
-            postId: postId
+            postId: Number(postId)
         }
         
     });
