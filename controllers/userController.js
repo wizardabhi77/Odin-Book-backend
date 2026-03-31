@@ -134,7 +134,7 @@ async function postDislike(req, res) {
     const { postId } = req.body;
     const uid = req.user.id;
 
-    const like = await db.updateDislike(postId, uid);
+    const like = await db.deleteLike(postId, uid);
 
     res.json(like);
 }
