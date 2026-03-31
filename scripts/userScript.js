@@ -87,7 +87,7 @@ async function deleteLike(postId, uid) {
         where: {
             postId_userId: {
                 postId: postId,
-                userId: userId
+                userId: uid
             }
         }
         
