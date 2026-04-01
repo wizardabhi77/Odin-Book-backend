@@ -159,14 +159,12 @@ async function postProfilePic(req, res) {
 
     try {
         if(!req.file){
-            return res.status(404).json({error: "file not uploaded"});
+            return res.status(400).json({error: "file not uploaded"});
         }
-
+        console.log(req.file);
         const uid = req.user.id;
 
-        const result = await cloudinary.uploader.upload(req.file.path);
-
-        const imageUrl = result.secure_url;
+        const imageUrl = req.file.path;
 
         const user = await db.updateProfilePic(imageUrl, uid);
 
