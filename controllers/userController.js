@@ -155,7 +155,7 @@ async function postEditUser(req, res) {
 
 }
 
-async function postProfilePic(req, res) {
+async function postProfileePic(req, res) {
 
     try {
         if(!req.file){
@@ -177,6 +177,22 @@ async function postProfilePic(req, res) {
     }
 
 }
+
+
+
+    async function postProfilePic(req, res) {
+    try {
+        console.log("File:", req.file);
+        console.log("User:", req.user);
+
+        return res.json({ message: "Controller reached" });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+}
+
 
 export default {
     getUserById,
