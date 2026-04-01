@@ -166,7 +166,7 @@ async function postProfilePic(req, res) {
 
         const result = await cloudinary.uploader.upload(req.file.path);
 
-        const imageUrl = res.secure_url;
+        const imageUrl = result.secure_url;
 
         const user = await db.updateProfilePic(imageUrl, uid);
 
