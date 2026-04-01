@@ -25,6 +25,6 @@ userRouter.post("/post/delete", auth, userController.postDeletePost);
 userRouter.post("/like", auth, userController.postLike);
 userRouter.post("/dislike", auth, userController.postDislike);
 userRouter.post("/edit", auth, userController.postEditUser);
-userRouter.post("/profilePic", auth, upload.single("profilePic"), userController.postProfilePic);
+userRouter.post("/profilePic", auth, upload.single("image"), userController.postProfilePic);
 
 export default userRouter;
