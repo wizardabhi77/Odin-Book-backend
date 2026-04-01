@@ -17,6 +17,11 @@ server.use("/", userRouter);
 
 server.use("/", commentRouter);
 
+server.use((err, req, res, next) => {
+    console.error("GLOBAL ERROR:", err);
+    res.status(500).json({ error: err.message });
+});
+
 
 const PORT = process.env.PORT || 5050;
 

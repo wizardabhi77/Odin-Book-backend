@@ -25,6 +25,20 @@ userRouter.post("/post/delete", auth, userController.postDeletePost);
 userRouter.post("/like", auth, userController.postLike);
 userRouter.post("/dislike", auth, userController.postDislike);
 userRouter.post("/edit", auth, userController.postEditUser);
-userRouter.post("/profilePic", auth, upload.single("image"), userController.postProfilePic);
+userRouter.post("/profilePic", (req, res, next) => {
+    console.log("ROUTE HIT");
+    next();
+  },
+  auth,
+  (req, res, next) => {
+    console.log("AUTH PASSED");
+    next();
+  },
+  upload.single("image"),
+  (req, res, next) => {
+    console.log("MULTER PASSED");
+    console.log("FILE:", req.file);
+    next();
+  }, userController.postProfilePic);
 
 export default userRouter;
