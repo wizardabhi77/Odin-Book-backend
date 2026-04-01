@@ -223,17 +223,17 @@ async function findLikes(postId) {
 
 //update
 
-async function updateUser(username, email, password, imgPath, uid) {
+async function updateUser(username, email, password, uid) {
 
     const user = await prisma.users.update({
         where: {
             id: uid
         },
         data: {
-            username: username,
-            email: email,
-            password: password,
-            profilePic: imgPath
+            ...(username && { username }),
+            ...(email && { email }),
+            ...(password && { password }),
+            
         }
     });
 

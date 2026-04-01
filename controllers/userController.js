@@ -3,6 +3,7 @@ import db from '../scripts/userScript.js';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import cloudinary from '../config/cloudinary.js';
 
 
 async function getUserById (req, res) {
@@ -143,17 +144,10 @@ async function postEditUser(req, res) {
 
     const { username, email, password } = req.body;
 
-    const image = req.file;
-
-    let imagePath = null;
-
-    if(image){
-        imagePath = image.path;
-    }
 
     const uid = req.user.id;
 
-     const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await db.updateUser(username, email, hashedPassword, imagePath, uid);
 
@@ -163,13 +157,24 @@ async function postEditUser(req, res) {
 
 async function postProfilePic(req, res) {
 
-    const imgPath = req.file.filename;
+    try {
+        if(!req.file){
+            return res.status(404).json({error: "file not uploaded"});
+        }
 
-    const userId = req.user.id;
+        const uid = req.user.id;
 
-    const user = await db.updateProfilePic(imgPath, userId);
+        const res = await cloudinary.uploader.upload(req.file.path);
 
-    res.json(user);
+        const imageUrl = res.secure_url;
+
+        const user = await db.updateProfilePic(imageUrl, uid);
+
+        res.json(user);
+    }catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message});
+    }
 
 }
 
