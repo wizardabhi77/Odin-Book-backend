@@ -172,8 +172,11 @@ async function postProfileePic(req, res) {
 
         res.json(user);
     }catch (error) {
-        console.log(error);
-        res.status(500).json({ error: error.message});
+         console.log("ERROR:", error);
+        console.log("ERROR MESSAGE:", error.message);
+        console.log("ERROR STACK:", error.stack);
+
+        res.status(500).json({ error: error.message });
     }
 
 }
